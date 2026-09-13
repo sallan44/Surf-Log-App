@@ -83,7 +83,7 @@ class SessionControllerTest extends TestCase
             'board_id' => $board->id,
         ]);
 
-        $response = $this->get(route('sessions.index'));
+        $response = $this->get(route('feed'));
 
         $response->assertOk();
         $response->assertViewHas('sessions', function ($sessions) use ($publicSession, $privateSession) {

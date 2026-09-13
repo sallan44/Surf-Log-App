@@ -9,7 +9,7 @@ class SurfSessionPolicy
 {
     public function view(?User $user, SurfSession $surfSession): bool
     {
-        return !$surfSession->spot->is_private || $user?->id === $surfSession->user_id;
+        return $user?->id === $surfSession->user_id;
     }
 
     public function update(User $user, SurfSession $surfSession): bool

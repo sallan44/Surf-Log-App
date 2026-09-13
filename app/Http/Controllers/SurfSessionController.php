@@ -6,17 +6,9 @@ use App\Models\Board;
 use App\Models\Spot;
 use App\Models\SurfSession;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
 
-class SurfSessionController extends Controller implements HasMiddleware
+class SurfSessionController extends Controller
 {
-    public static function middleware(): array
-    {
-        return [
-            new Middleware('auth', except: ['index', 'show']),
-        ];
-    }
 
     public function index(Request $request)
     {

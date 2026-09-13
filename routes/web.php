@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SpotController;
 use App\Http\Controllers\SurfSessionController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\FeedController;
 
 Route::get('/', function () {
     return view('dashboard');
@@ -17,12 +18,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::resource('spots', SpotController::class);
-Route::resource('sessions', SurfSessionController::class)->parameters(['sessions' => 'surf_session']); //Laravel's implicit route-model-binding matches the URI segment name to controller method's parameter name
+Route::get('feed', [FeedController::class, 'index'])->name('feed');
 
 Route::middleware('auth')->group(function () {
+    Route::resource('spots', SpotController::class);
     Route::resource('boards', BoardController::class);
     Route::resource('tags', TagController::class);
+    Route::resource('sessions', SurfSessionController::class)->parameters(['sessions' => 'surf_session']); //Laravel's implicit route-model-binding matches the URI segment name to controller method's parameter name
+
 });
 
 require __DIR__.'/auth.php';

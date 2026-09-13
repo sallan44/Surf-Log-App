@@ -5,21 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Spot;
 use App\Models\Tag;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
 
-class SpotController extends Controller implements HasMiddleware
+class SpotController extends Controller
 {
-    public static function middleware(): array
-    {
-        return [
-            new Middleware('auth', except: ['index', 'show']),
-        ];
-    }
 
     public function index(Request $request)
     {
-        $spots = Spot::where(function ($query) use ($request) {$query->where('is_private', false)->orWhere('user_id', $request->user()->id);})->orderBy('name')->get();
+        $spots = Spot::where('user_id', $request->user()->id)->orderBy('name')->get();
         return view('spots.spot_list', ['spots' => $spots]);
     }
 
