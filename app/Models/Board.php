@@ -20,4 +20,12 @@ class Board extends Model
     {
         return $this->hasMany(SurfSession::class);
     }
+
+    public function getPhotoUrlAttribute(): string
+    {
+        return $this->photo_path
+            ? Storage::disk('public')->url($this->photo_path)
+            : asset('images/default-board.jpg');
+    }
+
 }

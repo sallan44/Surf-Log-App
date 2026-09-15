@@ -6,6 +6,7 @@
 
 @section('content')
 <h1>{{$board->name}}</h1>
+<img src="{{ $board->photo_url }}" alt="{{ $board->name }}" class="w-full h-48 object-cover rounded">
 <p>Type: {{$board->type}}</p>
 <p>Length: {{$board->length_ft}} ft</p>
 

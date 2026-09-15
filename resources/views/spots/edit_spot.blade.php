@@ -15,12 +15,26 @@
     </ul>
 @endif
 
-<form method="post" action="{{route('spots.update', $spot)}}">
+<form method="post" action="{{route('spots.update', $spot)}}" enctype="multipart/form-data">
     {{csrf_field()}}
     {{method_field('PUT')}}
     <p>
         <label>Name</label>
         <input type="text" name="name" value="{{old('name', $spot->name)}}">
+    </p>
+    <p>
+        <label>Current Photo</label><br>
+        <img src="{{ $spot->photo_url }}" alt="{{ $spot->name }}" style="max-width: 200px; display: block;">
+
+        @if ($spot->photo_path)
+            <label>
+                <input type="checkbox" name="remove_photo" value="1">
+                Remove photo (revert to default)
+            </label><br>
+        @endif
+
+        <label>Replace with new photo</label>
+        <input type="file" name="photo" accept="image/*">
     </p>
     <p>
         <label>Region</label>

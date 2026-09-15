@@ -7,6 +7,7 @@
 @section('content')
 
 <h1>{{$spot->name}}</h1>
+<img src="{{ $spot->photo_url }}" alt="{{ $spot->name }}" class="w-full h-48 object-cover rounded">
 <p>{{$spot->region}}</p>
 <p>{{$spot->description}}</p>
 

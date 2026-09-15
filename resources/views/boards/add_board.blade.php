@@ -15,11 +15,15 @@
     </ul>
 @endif
 
-<form method="post" action="{{route('boards.store')}}">
+<form method="post" action="{{route('boards.store')}}" enctype="multipart/form-data">
     {{csrf_field()}}
     <p>
         <label>Name</label>
         <input type="text" name="name" value="{{old('name')}}">
+    </p>
+    <p>
+        <label>Photo (optional)</label>
+        <input type="file" name="photo" accept="image/*">
     </p>
     <p>
         <label>Type</label>

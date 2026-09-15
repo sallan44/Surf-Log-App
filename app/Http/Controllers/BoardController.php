@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Board;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BoardController extends Controller
 {
@@ -30,10 +31,18 @@ class BoardController extends Controller
             'name'      => 'required|string|max:255',
             'type'      => 'nullable|in:shortboard,longboard,fish,gun,other',
             'length_ft' => 'nullable|numeric|between:4,12',
+            'photo'     => 'nullable|image|max:5120',
         ]);
+
+        // unset($validated['photo']);
 
         $board = new Board($validated);
         $board->user_id = $request->user()->id;
+
+        if ($request->hasFile('photo')) {
+            $board->photo_path = $request->file('photo')->store('boards', 'public');
+        }
+
         $board->save();
 
         return redirect()->route('boards.show', $board);
@@ -53,9 +62,22 @@ class BoardController extends Controller
             'name'      => 'required|string|max:255',
             'type'      => 'nullable|in:shortboard,longboard,fish,gun,other',
             'length_ft' => 'nullable|numeric|between:4,12',
+            'photo'        => 'nullable|image|max:5120',
+            'remove_photo' => 'nullable|boolean',
         ]);
 
         $board->update($validated);
+
+        if ($request->hasFile('photo')) {
+        // replacing - delete the old file so orphans don't pile up in storage
+            if ($board->photo_path) {
+                Storage::disk('public')->delete($board->photo_path);
+            }
+            $board->photo_path = $request->file('photo')->store('boards', 'public');
+        } elseif ($request->boolean('remove_photo') && $board->photo_path) {
+            Storage::disk('public')->delete($board->photo_path);
+            $board->photo_path = null;
+        }
 
         return redirect()->route('boards.show', $board);
     }
