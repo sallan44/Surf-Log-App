@@ -11,7 +11,7 @@ class SpotController extends Controller
 
     public function index(Request $request)
     {
-        $spots = Spot::where('user_id', $request->user()->id)->orderBy('name')->get();
+        $spots = Spot::where('user_id', $request->user()->id)->orderBy('name')->paginate(10);
         return view('spots.spot_list', ['spots' => $spots]);
     }
 

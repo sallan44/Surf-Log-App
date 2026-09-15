@@ -19,13 +19,17 @@
     {{csrf_field()}}
     <p>
         <label>Spot</label>
-        <select name="spot_id">
-            @foreach ($spots as $spot)
-                <option value="{{$spot->id}}" {{old('spot_id') == $spot->id ? 'selected' : ''}}>
-                    {{$spot->name}}@if($spot->is_private) (private) @endif
-                </option>
-            @endforeach
-        </select>
+        @if ($spots->isEmpty())
+            <em>You don't have any spots yet - <a href="{{route('spots.create')}}">add one first</a>.</em>
+        @else
+            <select name="spot_id">
+                @foreach ($spots as $spot)
+                    <option value="{{$spot->id}}" {{old('spot_id') == $spot->id ? 'selected' : ''}}>
+                        {{$spot->name}}@if($spot->is_private) (private) @endif
+                    </option>
+                @endforeach
+            </select>
+        @endif
     </p>
     <p>
         <label>Board</label>

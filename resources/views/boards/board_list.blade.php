@@ -12,4 +12,7 @@
 @foreach ($boards as $board)
     <p><a href="{{route('boards.show', $board)}}">{{$board->name}}</a> ({{$board->type}})</p>
 @endforeach
+
+{{ $boards->links() }}
+
 @endsection

@@ -18,4 +18,6 @@
     </p>
 @endforeach
 
+{{ $spots->links() }}
+
 @endsection

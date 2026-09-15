@@ -16,4 +16,7 @@
         </a>
     </p>
 @endforeach
+
+{{ $sessions->links() }}
+
 @endsection

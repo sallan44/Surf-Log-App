@@ -9,7 +9,7 @@ class BoardController extends Controller
 {
     public function index(Request $request)
     {
-        $boards = Board::where('user_id', $request->user()->id)->orderBy('name')->get();
+        $boards = Board::where('user_id', $request->user()->id)->orderBy('name')->paginate(10);
         return view('boards.board_list', ['boards' => $boards]);
     }
 

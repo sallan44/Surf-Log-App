@@ -15,7 +15,7 @@ class SurfSessionController extends Controller
         $sessions = SurfSession::where('user_id', $request->user()->id)
         ->with(['spot', 'board'])
         ->orderBy('session_date', 'desc')
-        ->get();
+        ->paginate(10);
 
         return view('sessions.session_list', ['sessions' => $sessions]);
     }
@@ -29,7 +29,7 @@ class SurfSessionController extends Controller
     public function create(Request $request)
     {
         return view('sessions.add_session', [
-            'spots'  => $this->accessibleSpots($request),
+            'spots'  => Spot::where('user_id', $request->user()->id)->orderBy('name')->get(),
             'boards' => Board::where('user_id', $request->user()->id)->orderBy('name')->get(),
         ]);
     }
@@ -55,7 +55,7 @@ class SurfSessionController extends Controller
 
         return view('sessions.edit_session', [
             'session' => $surfSession,
-            'spots'   => $this->accessibleSpots($request),
+            'spots'   => Spot::where('user_id', $request->user()->id)->orderBy('name')->get(),
             'boards'  => Board::where('user_id', $request->user()->id)->orderBy('name')->get(),
         ]);
     }
@@ -112,13 +112,4 @@ class SurfSessionController extends Controller
         return null;
     }
 
-    private function accessibleSpots(Request $request)
-    {
-        return Spot::where(function ($query) use ($request) {
-                $query->where('is_private', false)
-                      ->orWhere('user_id', $request->user()->id);
-            })
-            ->orderBy('name')
-            ->get();
-    }
 }
