@@ -40,3 +40,7 @@ git commit -m "Initial commit"
 git remote add origin https://github.com/YOUR_USERNAME/my-laravel-project.git
 git branch -M main
 git push -u origin main
+
+API:
+
+php artisan cache:clear

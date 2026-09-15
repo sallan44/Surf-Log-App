@@ -6,6 +6,8 @@ use App\Models\Board;
 use App\Models\Spot;
 use App\Models\SurfSession;
 use Illuminate\Http\Request;
+use App\Services\MarineConditionsService;
+use App\Services\WindConditionsService;
 
 class SurfSessionController extends Controller
 {
@@ -20,11 +22,19 @@ class SurfSessionController extends Controller
         return view('sessions.session_list', ['sessions' => $sessions]);
     }
 
-    public function show(SurfSession $surfSession)
-    {
-        $this->authorize('view', $surfSession);
-        return view('sessions.session_detail', ['session' => $surfSession->load(['spot', 'board'])]);
-    }
+    public function show(SurfSession $surfSession, MarineConditionsService $marineConditions, WindConditionsService $windConditions)
+{
+    $this->authorize('view', $surfSession);
+
+    $conditions = $marineConditions->forSpotOnDate($surfSession->spot, $surfSession->session_date);
+    $wind = $windConditions->forSpotOnDate($surfSession->spot, $surfSession->session_date);
+
+    return view('sessions.session_detail', [
+        'session'    => $surfSession->load(['spot', 'board']),
+        'conditions' => $conditions,
+        'wind'       => $wind,
+    ]);
+}
 
     public function create(Request $request)
     {

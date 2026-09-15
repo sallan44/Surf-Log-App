@@ -14,6 +14,11 @@ return [
     |
     */
 
+    'open_meteo' => [
+        'marine_url'   => env('OPEN_METEO_MARINE_URL', 'https://marine-api.open-meteo.com/v1/marine'),
+        'forecast_url' => env('OPEN_METEO_FORECAST_URL', 'https://api.open-meteo.com/v1/forecast'),
+    ],
+
     'postmark' => [
         'key' => env('POSTMARK_API_KEY'),
     ],
