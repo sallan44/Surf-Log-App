@@ -44,5 +44,8 @@
         @empty
             <p class="text-gray-500">No public sessions logged yet.</p>
         @endforelse
+
+        {{ $sessions->links() }}
+
     </div>
 </x-app-layout>

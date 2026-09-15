@@ -12,16 +12,10 @@ class SurfSessionController extends Controller
 
     public function index(Request $request)
     {
-        $sessions = SurfSession::where(function ($query) use ($request) {
-                $query->whereHas('spot', fn ($q) => $q->where('is_private', false));
-
-                if ($request->user()) {
-                    $query->orWhere('user_id', $request->user()->id);
-                }
-            })
-            ->with(['spot', 'board'])
-            ->orderBy('session_date', 'desc')
-            ->get();
+        $sessions = SurfSession::where('user_id', $request->user()->id)
+        ->with(['spot', 'board'])
+        ->orderBy('session_date', 'desc')
+        ->get();
 
         return view('sessions.session_list', ['sessions' => $sessions]);
     }

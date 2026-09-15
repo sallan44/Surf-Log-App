@@ -11,7 +11,7 @@ class FeedController extends Controller
         $sessions = SurfSession::whereHas('spot', fn ($query) => $query->where('is_private', false))
             ->with(['spot.tags', 'board', 'user'])
             ->orderBy('session_date', 'desc')
-            ->get();
+            ->paginate(10);
 
         return view('feed', ['sessions' => $sessions]);
     }
