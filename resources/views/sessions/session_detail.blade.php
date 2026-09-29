@@ -6,6 +6,7 @@
     <x-hero-backdrop :image="$session->spot->photo_url" :alt="$session->spot->name">
         <h1 class="text-2xl sm:text-3xl font-bold text-white drop-shadow">{{ $session->spot->name }}</h1>
         <p class="text-sand-100">{{ $session->session_date }}</p>
+        <p class="text-sand-100">{{ $session->start_time }}</p>
     </x-hero-backdrop>
 
     <div class="max-w-3xl mx-auto -mt-8 relative px-4 sm:px-0 pb-12">
@@ -24,7 +25,7 @@
 
             @if ($conditions)
                 <div class="p-3 bg-ocean-50 rounded-lg">
-                    <h3 class="font-semibold text-sm text-ocean-900">Swell &amp; tide that day</h3>
+                    <h3 class="font-semibold text-sm text-ocean-900">Swell &amp; tide that day at {{ $session->start_time }}</h3>
                     <p class="text-sm text-ocean-800">
                         Swell: {{ $conditions['swell_height'] }}m @ {{ $conditions['swell_period'] }}s from {{ $conditions['swell_direction'] }}&deg;
                     </p>

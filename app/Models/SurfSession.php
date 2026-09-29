@@ -9,7 +9,7 @@ class SurfSession extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['spot_id', 'board_id', 'session_date', 'rating', 'wave_count', 'notes'];
+    protected $fillable = ['spot_id', 'board_id', 'session_date', 'start_time', 'rating', 'wave_count', 'notes'];
 
     public function user()
     {

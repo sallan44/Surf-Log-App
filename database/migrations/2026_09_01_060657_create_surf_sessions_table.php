@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('spot_id')->constrained('spots')->onDelete('cascade');
             $table->foreignId('board_id')->constrained('boards')->onDelete('restrict');
             $table->date('session_date');
+            $table->time('start_time');
             $table->unsignedTinyInteger('rating');
             $table->unsignedInteger('wave_count')->nullable();
             $table->text('notes')->nullable();

@@ -26,8 +26,8 @@ class SurfSessionController extends Controller
 {
     $this->authorize('view', $surfSession);
 
-    $conditions = $marineConditions->forSpotOnDate($surfSession->spot, $surfSession->session_date);
-    $wind = $windConditions->forSpotOnDate($surfSession->spot, $surfSession->session_date);
+    $conditions = $marineConditions->forSpotOnDate($surfSession->spot, $surfSession->session_date, $surfSession->start_time);
+    $wind = $windConditions->forSpotOnDate($surfSession->spot, $surfSession->session_date, $surfSession->start_time);
 
     return view('sessions.session_detail', [
         'session'    => $surfSession->load(['spot', 'board']),
@@ -100,6 +100,7 @@ class SurfSessionController extends Controller
             'spot_id'      => 'required|integer|exists:spots,id',
             'board_id'     => 'required|integer|exists:boards,id',
             'session_date' => 'required|date|before_or_equal:today',
+            'start_time'   => 'required|date_format:H:i',
             'rating'       => 'required|integer|between:1,5',
             'wave_count'   => 'nullable|integer|min:0',
             'notes'        => 'nullable|string',

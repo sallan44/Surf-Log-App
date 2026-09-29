@@ -9,23 +9,25 @@ use Illuminate\Support\Facades\Log;
 
 class MarineConditionsService
 {
-    public function forSpotOnDate(Spot $spot, $date): ?array
+    public function forSpotOnDate(Spot $spot, $date, $time): ?array
     {
         $date = \Carbon\Carbon::parse($date)->format('Y-m-d');
-        $cacheKey = "marine-conditions:{$spot->latitude}:{$spot->longitude}:{$date}";
+        $time = \Carbon\Carbon::parse($time)->format('H:00');
+        $cacheKey = "marine-conditions:{$spot->latitude}:{$spot->longitude}:{$date}:{$time}";
 
-        return Cache::remember($cacheKey, now()->addDay(), function () use ($spot, $date) {
-            return $this->fetch($spot, $date);
+        return Cache::remember($cacheKey, now()->addDay(), function () use ($spot, $date, $time) {
+            return $this->fetch($spot, $date, $time);
         });
     }
     
-    private function fetch(Spot $spot, string $date): ?array
+    private function fetch(Spot $spot, string $date, string $time): ?array
     {
         try {
             $response = Http::timeout(5)->get(config('services.open_meteo.marine_url'), [
                 'latitude'   => $spot->latitude,
                 'longitude'  => $spot->longitude,
                 'hourly'     => 'swell_wave_height,swell_wave_period,swell_wave_direction,sea_level_height_msl',
+                'timezone'   => 'auto',
                 'start_date' => $date,
                 'end_date'   => $date,
             ]);
@@ -34,20 +36,20 @@ class MarineConditionsService
                 return null;
             }
 
-            return $this->extractNoonReading($response->json());
+            return $this->extractTimeReading($response->json(), $time);
         } catch (\Throwable $e) {
             Log::warning("Marine conditions fetch failed: {$e->getMessage()}");
             return null;
         }
     }
 
-    private function extractNoonReading(array $data): ?array
+    private function extractTimeReading(array $data, string $time): ?array
     {
         $times = $data['hourly']['time'] ?? [];
         $noonIndex = null;
 
         foreach ($times as $index => $timestamp) {
-            if (str_ends_with($timestamp, '12:00')) {
+            if (str_ends_with($timestamp, $time)) {
                 $noonIndex = $index;
                 break;
             }

@@ -52,6 +52,11 @@
                 </div>
 
                 <div>
+                    <x-input-label for="start_time" value="Start Time" />
+                    <x-text-input id="start_time" name="start_time" type="time" class="mt-1 block w-full" value="{{ old('start_time') }}" />
+                </div>
+
+                <div>
                     <x-input-label for="rating" value="Rating (1-5)" />
                     <x-text-input id="rating" name="rating" type="number" min="1" max="5" class="mt-1 block w-full" value="{{ old('rating') }}" />
                 </div>
